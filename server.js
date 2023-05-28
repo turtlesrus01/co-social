@@ -1,4 +1,4 @@
-
+//import express, connection file and routes
 const express = require('express');
 const db = require('./config/connection');
 const routes = require('./routes');
