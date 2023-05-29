@@ -1,5 +1,5 @@
 //import models
-const { User } = require('../models');
+const { User } = require("../models");
 
 //export user functions
 module.exports = {
@@ -13,15 +13,17 @@ module.exports = {
     }
   },
   //GET one user
-  async getUser (req, res) {
+  async getUser(req, res) {
     try {
-      const user = await User.findOne({ _id: req.params.userId})
-        .select('-__v');
+      const user = await User.findOne({ _id: req.params.userId }).select(
+        "-__v"
+      );
+
       if (!user) {
-        return res.status(404).json({ message: 'No user with that ID'})
+        return res.status(404).json({ message: "No user with that ID" });
       }
 
-      res.json(user)
+      res.json(user);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -36,4 +38,22 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
-}
+  //UPDATE a user
+  async updateUser(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $set: req.body },
+        { runValidators: true, new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({ message: "No user with that ID" });
+      }
+
+      res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+};
