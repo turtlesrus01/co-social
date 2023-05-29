@@ -13,5 +13,9 @@ const {
 router.route("/").get(getUsers).post(createUser);
 
 //routing to api/users/:userId (one users)
+router
+  .route('/:userId')
+  .get(getUser)
+  .put(updateUser);
 
 module.exports = router;
