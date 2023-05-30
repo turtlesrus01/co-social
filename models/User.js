@@ -1,5 +1,5 @@
 //import required modules
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 
 //user schema
 const userSchema = new Schema(
@@ -23,12 +23,12 @@ const userSchema = new Schema(
     },
     //thoughts (referencing thought model)
     thoughts: [{
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: 'Thought'
     }],
     //friends (self-reference)
     friends: [{
-      type: mongoose.Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: 'User'
     }],
     //toJSON 
