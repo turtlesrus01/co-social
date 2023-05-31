@@ -18,11 +18,11 @@ module.exports = {
       const thought = await Thought.findOne({ _id: req.params.thoughtId })
         .select("-__v")
 
-      if (!user) {
+      if (!thought) {
         return res.status(404).json({ message: "No thought exists with that ID" });
       }
 
-      res.json(user);
+      res.json(thought);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -47,7 +47,7 @@ module.exports = {
       );
 
       if (!thought) {
-        return res.status(404).json({ message: "No user with that ID" });
+        return res.status(404).json({ message: "No thought exists with that ID" });
       }
 
       res.json(thought);
@@ -61,7 +61,7 @@ module.exports = {
       const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
 
       if (!thought) {
-        return res.status(404).json({ message: "No thought with that ID" });
+        return res.status(404).json({ message: "No thought exists with that ID" });
       }
 
       res.json({ message: "Thought deleted." });
@@ -69,8 +69,48 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  
   //reactions
   //CREATE a reaction
+  async createReaction(req, res) {
+    try {
+      const thought = await Thought.findOne({ _id: req.params.thoughtId});
+
+      if (!thought) {
+        return res.status(404).json({ message: "No thought exists with that ID" });
+      }
+
+      thought.reactions.push(req.body);
+      await thought.save();
+
+      res.json(thought);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err)
+    }
+  },
   //DELETE a reaction
-}
+  async deleteReaction(req, res) {
+    try {
+      const thought = await Thought.findOne({ _id: req.params.thoughtId });
+
+      if (!thought) {
+        return res.status(404).json({ message: "No thought exists with that ID" });
+      }
+
+      const reactionIndex = thought.reactions.findIndex(
+        reactions => reactionIndex.reactionId === req.params.reactionId
+      );
+
+      if (reactionIndex === -1) {
+        return res.status(404).json({ message: "No reaction exists with that ID" });
+      }
+      
+      thought.reactions.splice(reactionIndex, 1);
+      await thought.save();
+
+      res.json({ message: "Reaction deleted." });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+};
