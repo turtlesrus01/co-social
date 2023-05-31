@@ -12,9 +12,8 @@ connection.once('open', async () => {
   //Drop existing thoughts
   await Thought.deleteMany({});
 
-  //Array of user data
   try {
-    // Create an array of user data
+    //Create an array of user data
     const userData = [
       {
         username: 'user1',
@@ -47,14 +46,37 @@ connection.once('open', async () => {
         friends: [],
       },
     ];
-
+    //Insert users into collection then log success
     const createdUsers = await User.insertMany(userData);
-    
     console.log('Users seeded successfully!', createdUsers);
-    console.table(createdUsers)
+
+    //Pull user ids to assign thoughts
+    const userIds = createdUsers.map(user => user._id);
+
+    //Create an array of thoughts
+    const thoughts = [
+      {
+        thoughtText: 'Thought 1',
+        username: userIds[0],
+      },
+      {
+        thoughtText: 'Thought 2',
+        username: userIds[1],
+      },
+      {
+        thoughtText: 'Thought 3',
+        username: userIds[2],
+      },
+    ];
+
+    //Insert users into collection then log success
+    const createdThoughts = await Thought.create(thoughts);
+    console.log('Users seeded successfully!', createdThoughts);
+
+    //Exit connection
     process.exit(0);
   } catch (err) {
-    console.log('Error seeding users!', err);
+    console.log('Error seeding users and/or thoughts!', err);
   }
 
-})
+});
