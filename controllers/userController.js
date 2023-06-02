@@ -99,7 +99,8 @@ module.exports = {
         return res.status(404).json({ message: "No user exists with that ID" });
       }
 
-      user.friends.findOneAndRemove({ _id: req.body.friendId });
+      const friendId = req.params.friendId;
+      user.friends.pull(friendId);
       await user.save();
 
       res.json(user);
