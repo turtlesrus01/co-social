@@ -6,7 +6,7 @@ module.exports = {
   //GET all users
   async getUsers(req, res) {
     try {
-      const users = await User.find().populate('thoughts');
+      const users = await User.find().populate("thoughts");
       res.json(users);
     } catch (err) {
       res.status(500).json(err);
@@ -70,6 +70,42 @@ module.exports = {
       res.json({ message: "User and thoughts deleted." });
     } catch (err) {
       res.status(500).json(err);
+    }
+  },
+  //CREATE friend
+  async createFriend(req, res) {
+    try {
+      const user = await User.findOne({ _id: req.params.userId });
+
+      if (!user) {
+        return res.status(404).json({ message: "No user exists with that ID" });
+      }
+
+      user.friends.push(req.body);
+      await user.save();
+
+      res.json(user);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  },
+  //DELETE friend
+  async deleteFriend(req, res) {
+    try {
+      const user = await User.findOne({ _id: req.params.userId });
+
+      if (!user) {
+        return res.status(404).json({ message: "No user exists with that ID" });
+      }
+
+      user.friends.findOneAndRemove({ _id: req.body.friendId });
+      await user.save();
+
+      res.json(user);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
     }
   },
 };
