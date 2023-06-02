@@ -1,5 +1,6 @@
 //import required modules
 const { Schema, model, Types } = require("mongoose");
+const dayjs = require("dayjs");
 
 //reaction schema
 const reactionSchema = new Schema(
@@ -23,10 +24,10 @@ const reactionSchema = new Schema(
     //createdAt
     createdAt: {
       type: Date,
-      default: function () {
-        return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      default: () => dayjs().add(7, "day").toDate(),
+      get: (timestamp) => {
+        return dayjs(timestamp).format("DD-MM-YYYY");
       },
-      get: (timestamp) => dateFormat(timestamp),
     },
   },
   {
@@ -49,10 +50,10 @@ const thoughtSchema = new Schema(
     //createdAt
     createdAt: {
       type: Date,
-      default: function () {
-        return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      default: () => dayjs().add(7, "day").toDate(),
+      get: (timestamp) => {
+        return dayjs(timestamp).format("DD-MM-YYYY");
       },
-      get: (timestamp) => dateFormat(timestamp),
     },
     //username
     username: {

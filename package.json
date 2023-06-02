@@ -17,6 +17,7 @@
     "mongoose": "^7.2.1"
   },
   "devDependencies": {
+    "dayjs": "^1.11.7",
     "nodemon": "^2.0.22"
   }
 }
